@@ -1,0 +1,1 @@
+Khi compile bằng makefile thì đang bị lỗi khi nhấn enter để vào một chức năng thì nó nhận nút enter đấy làm đầu vào, trong khi compile bằng devC thì không gặp lỗi này 
