@@ -1,0 +1,11 @@
+gamer	12345678	1
+gamer2	12345678	2
+hedspi1	hedpsi2016	0
+hust	hust12345	0
+koharun	ko2runrun	1
+sayonara	123456	1
+shouko	thai051200	1
+soict	soictfit	1
+thaiduiqn	thai130102	1
+zett	123456	1
+zett2	123456	1
