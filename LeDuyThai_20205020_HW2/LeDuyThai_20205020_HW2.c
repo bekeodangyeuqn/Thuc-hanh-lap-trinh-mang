@@ -21,22 +21,46 @@ bool isIpAddress(const char *str)
     return true; // All checks passed, it's an IP address
 }
 
-int isDomainName(const char *domain_name)
+bool isDomainName(const char *input)
 {
-    regex_t regex;
-    int match;
+    int length = strlen(input);
 
-    // Compile the regular expression.
-    regcomp(&regex, "^(?!-)[A-Za-z0-9-]+([\\-\\.]{1}[a-z0-9]+)*\\.[A-Za-z]{2,6}$", REG_ICASE);
+    // Check if the length of the input is within valid domain name limits
+    if (length < 1 || length > 255)
+    {
+        return false;
+    }
 
-    // Try to match the domain name against the regular expression.
-    match = regexec(&regex, domain_name, 0, NULL, 0);
+    // Check for valid characters and format
+    int dotCount = 0;
+    for (int i = 0; i < length; i++)
+    {
+        char c = input[i];
+        if (isalnum(c) || c == '-' || c == '.')
+        {
+            if (c == '.')
+            {
+                // Check for consecutive dots
+                if (i > 0 && input[i - 1] == '.')
+                {
+                    return false;
+                }
+                dotCount++;
+            }
+        }
+        else
+        {
+            return false; // Invalid character
+        }
+    }
 
-    // Free the compiled regular expression.
-    regfree(&regex);
+    // There should be exactly one dot, and it should not be at the start or end
+    if (dotCount != 1 || input[0] == '.' || input[length - 1] == '.')
+    {
+        return false;
+    }
 
-    // Return true if the domain name matches the regular expression, false otherwise.
-    return match == 0;
+    return true;
 }
 
 int main(int argc, char *argv[])
@@ -53,10 +77,9 @@ int main(int argc, char *argv[])
     if (option == 1)
     {
         // Convert IP address to domain name
-        printf("Domain: %d\n", isDomainName("google.com"));
         if (isDomainName(host))
         {
-            printf("Wrong parameter");
+            printf("Wrong parameter\n");
             return 1;
         }
 
@@ -79,13 +102,18 @@ int main(int argc, char *argv[])
                 printf("%s\n", he->h_aliases[i]);
             }
         }
+        else
+        {
+            printf("Not found information.\n");
+            return 1;
+        }
     }
     else if (option == 2)
     {
         // Convert domain name to IP address
         if (isIpAddress(host))
         {
-            printf("Wrong parameter");
+            printf("Wrong parameter\n");
             return 1;
         }
 
